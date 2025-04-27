@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 const getAllEntries  = async (req, res) => {
 
-  const { userId } = req.params;
+ const userId = req.user._id
 
   try {
     const entries = await TrackerEntry.find({ userId }).sort({ date: 1 });
@@ -49,7 +49,8 @@ const getAllEntries  = async (req, res) => {
 // }
 
 const addTrackerEntry = async (req, res) => {
-  const { userId } = req.params;
+   const userId = req.user._id
+
   const { date, watchedPorn, relapseDetails, notes } = req.body;
 
   try {
@@ -90,7 +91,8 @@ const addTrackerEntry = async (req, res) => {
 
 
 const updateTrackerEntry = async (req, res) => {
-  const { userId, entryId } = req.params; // Extract userId and entryId from route parameters
+  const {entryId } = req.params; // Extract userId and entryId from route parameters
+   const userId = req.user._id
   const { date, watchedPorn, relapseDetails, notes } = req.body;
 
   try {
@@ -102,7 +104,7 @@ const updateTrackerEntry = async (req, res) => {
     }
 
     // Verify that the tracker entry belongs to the specified user
-    if (trackerEntry.userId.toString() !== userId) {
+    if (trackerEntry.userId.toString() != userId) {
       return res.status(403).json({ message: "Unauthorized: Tracker entry does not belong to this user" });
     }
 
@@ -122,18 +124,18 @@ const updateTrackerEntry = async (req, res) => {
 };
 
 const deleteTrackerEntry = async (req, res) => {
-  const { userId, entryId } = req.params; // Extract userId and entryId from route parameters
-
+  const {entryId } = req.params; // Extract userId and entryId from route parameters
+   const userId = req.user._id
   try {
     // Find the tracker entry by its ID
     const trackerEntry = await TrackerEntry.findById(entryId);
-
+    console.log(trackerEntry)
     if (!trackerEntry) {
       return res.status(404).json({ message: "Tracker entry not found" });
     }
 
     // Verify that the tracker entry belongs to the specified user
-    if (trackerEntry.userId.toString() !== userId) {
+    if (trackerEntry.userId.toString() != userId) {
       return res.status(403).json({ message: "Unauthorized: Tracker entry does not belong to this user" });
     }
 
@@ -147,7 +149,9 @@ const deleteTrackerEntry = async (req, res) => {
 };
 
 const getSingleTrackerEntry = async (req, res) => {
-  const { userId, entryId } = req.params; // Extract userId and entryId from route parameters
+  const { entryId } = req.params; // Extract userId and entryId from route parameters
+     const userId = req.user._id
+
 
   try {
     // Find the tracker entry by its ID
@@ -158,7 +162,7 @@ const getSingleTrackerEntry = async (req, res) => {
     }
 
     // Verify that the tracker entry belongs to the specified user
-    if (trackerEntry.userId.toString() !== userId) {
+    if (trackerEntry.userId.toString() != userId) {
       return res.status(403).json({ message: "Unauthorized: Tracker entry does not belong to this user" });
     }
 
@@ -169,7 +173,7 @@ const getSingleTrackerEntry = async (req, res) => {
 };
 
 const averageScoreForUser = async(req, res) => {
-  const { userId} = req.params;
+   const userId = req.user._id
     try {
     const entries = await TrackerEntry.find({ userId }).sort({ date: 1 });
     if (!entries.length) {

@@ -10,7 +10,7 @@ const {
     loginUser
 } = require("../controllers/users")
 
-const protect = require("../authentication/auth")
+const protect = require("../middleware/auth")
 
 router.route("/create").post(createUser);
 router.route("/login").post(loginUser)
@@ -18,7 +18,7 @@ router.route("/login").post(loginUser)
 // Protected route: Get all users (requires middleware)
 // router.route('/').get(protect, getAllUsers);
 
-router.route('/:id')
+router.route('/')
     .get(protect, getUserById)     // Middleware applied for GET request
     .put(protect, updateUser)     // Middleware applied for PUT request
     .delete(protect, deleteUser);

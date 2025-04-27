@@ -41,7 +41,7 @@ const getAllUsers = async (req, res) => {
 
 // Get a single user by ID
 const getUserById = async (req, res) => {
-  const { id } = req.params;
+ const id = req.user._id
 
   try {
     const user = await User.findById(id);
@@ -58,7 +58,7 @@ const getUserById = async (req, res) => {
 
 // Update user details
 const updateUser = async (req, res) => {
-  const { id } = req.params;
+ const id = req.user._id
   const { username, password } = req.body;
 
   try {
@@ -81,7 +81,7 @@ const updateUser = async (req, res) => {
 
 // Delete a user
 const deleteUser = async (req, res) => {
-  const { id } = req.params;
+ const id = req.user._id
 
   try {
     const user = await User.findById(id);
