@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require('cors');
+
 const tracker = require("./routes/tracker")
 const user = require("./routes/user")
 const PORT = 8000;
@@ -7,6 +9,7 @@ require('dotenv').config();
 const connectDB = require('./db/connect')
 
 const app = express();
+app.use(cors());
 
 app.get("/", (req, res) => {
     console.log("welcome");
