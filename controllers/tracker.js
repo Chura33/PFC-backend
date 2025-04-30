@@ -2,9 +2,7 @@ const TrackerEntry = require("../models/TrackerEntry");
 const User = require("../models/User");
 
 const getAllEntries  = async (req, res) => {
-
  const userId = req.user._id
-
   try {
     const entries = await TrackerEntry.find({ userId }).sort({ date: 1 });
 
@@ -190,4 +188,19 @@ const averageScoreForUser = async(req, res) => {
   }
 }
 
-module.exports = {getAllEntries, addTrackerEntry, updateTrackerEntry, deleteTrackerEntry, getSingleTrackerEntry, averageScoreForUser}
+const startDateForUser = async(req, res) => {
+     const userId = req.user._id
+    try {
+    const entries = await TrackerEntry.find({ userId }).sort({ date: 1 });
+    if (!entries.length) {
+      return res.status(404).json({ message: "No tracker entries found" });
+    }
+
+    const startDate = entries[0].date;
+    res.status(200).json({"start": startDate})
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred", error });
+  }
+}
+
+module.exports = {getAllEntries, addTrackerEntry, updateTrackerEntry, deleteTrackerEntry, getSingleTrackerEntry, averageScoreForUser, startDateForUser}
